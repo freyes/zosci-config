@@ -10,9 +10,6 @@
       nodes:
         - name: focal-medium
           label: focal-medium
-    secrets: &log_clouds
-      # - serverstack_cloud
-      - artifact_cloud
     branches: ^(?!stable\/(1\.5|1\.6|1\.7|1\.8|4\.0|4\.1|4\.2|20\.03|20\.12|21\.09|22\.03|22\.09|21\.10|focal|jammy|train|ussuri|victoria|wallaby|xena|yoga|zed|luminous|mimic|nautilus|octopus|pacific|quincy|quincy\.2)).*$
     # vars:
     #   tox_environment:
@@ -32,7 +29,6 @@
       nodes:
         - name: focal-medium
           label: focal-medium
-    secrets: *log_clouds
     branches: ^stable\/(1\.5|1\.6|1\.7|1\.8|4\.0|4\.1|4\.2|20\.03|20\.12|21\.09|22\.03|22\.09|21\.10|focal|jammy|train|ussuri|victoria|wallaby|xena|yoga|zed|luminous|mimic|nautilus|octopus|pacific|quincy|quincy\.2).*$
     vars:
       # NOTE(coreycb): This job is for stable branches <= stable/zed. Tox 4
@@ -176,8 +172,6 @@
     parent: tox
     provides: charm
     run: playbooks/charm/build.yaml
-    secrets:
-      - serverstack_cloud
     nodeset:
       nodes:
         - name: xenial-medium
@@ -190,8 +184,6 @@
     pre-run: playbooks/juju/pre.yaml
     post-run: playbooks/juju/post.yaml
     cleanup-run: playbooks/juju/cleanup.yaml
-    secrets:
-      - serverstack_cloud
     vars:
       juju_snap_channel: "2.9/stable"
 
@@ -329,10 +321,6 @@
         # https://github.com/openstack-charmers/zaza/commit/fc268181e8da1cb4293328fa2e78082873d98697
         TEST_ZAZA_BUG_LP1987332: "1"
       tox_envlist: func-target
-    secrets:
-      - serverstack_cloud
-      - purestorage_api_token
-      - netapp_vsadmin_password
 
 ### jobs for CI
 #
@@ -761,8 +749,6 @@
     pre-run: playbooks/new-tenant-juju/pre.yaml
     post-run: playbooks/juju/post.yaml
     cleanup-run: playbooks/new-tenant-juju/cleanup.yaml
-    secrets:
-      - serverstack_admin
     vars:
       juju_snap_channel: "2.9/stable"
 
@@ -774,9 +760,6 @@
     provides: charm
     post-review: true
     run: playbooks/charm/publish.yaml
-    secrets:
-      - serverstack_cloud
-      - charmhub_token
     nodeset:
       nodes:
         - name: focal-medium
@@ -787,5 +770,3 @@
     pre-run: playbooks/sqalab/pre.yaml
     run: playbooks/sqalab/run.yaml
     abstract: true
-    secrets:
-      - sqalab_environment
