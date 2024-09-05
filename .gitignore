@@ -1,3 +1,7 @@
 .tox
 .stestr/
 __pycache__/
+infrastructure/secrets/*
+infrastructure/terraform.tfstate*
+infrastructure/.terraform
+infrastructure/.terraform.lock.hcl
