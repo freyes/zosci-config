@@ -63,6 +63,28 @@ resource "kubernetes_secret" "docker_registry" {
   type = "kubernetes.io/dockerconfigjson"
 }
 
+resource "kubernetes_secret" "nodepool_config" {
+  metadata {
+    name = "nodepool-config"
+    namespace = kubernetes_namespace.zuul.metadata[0].name
+  }
+
+  data = {
+    "nodepool.yaml" = "${file("${path.module}/nodepool.yaml")}"
+  }
+}
+
+resource "kubernetes_secret" "clouds_config" {
+  metadata {
+    name = "clouds-config"
+    namespace = kubernetes_namespace.zuul.metadata[0].name
+  }
+
+  data = {
+    "clouds.yaml" = "${file("${path.module}/secrets/clouds.yaml")}"
+  }
+}
+
 resource "kubernetes_secret" "tenant_config" {
     metadata {
         name = "zuul-tenant-config"
@@ -349,6 +371,63 @@ spec:
   issuerRef:
     name: ca-issuer
     kind: Issuer
+YAML
+}
+
+resource "kubectl_manifest" "nodepool_deployment" {
+  yaml_body = <<YAML
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodepool-launcher-serverstack
+  namespace: zuul
+  labels:
+    app.kubernetes.io/name: nodepool
+    app.kubernetes.io/instance: nodepool-serverstack
+    app.kubernetes.io/part-of: zuul
+    app.kubernetes.io/component: nodepool-launcher
+    operator.zuul-ci.org/nodepool-provider: serverstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nodepool
+      app.kubernetes.io/instance: nodepool-serverstack
+      app.kubernetes.io/part-of: zuul
+      app.kubernetes.io/component: nodepool-launcher
+      operator.zuul-ci.org/nodepool-provider: serverstack
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nodepool
+        app.kubernetes.io/instance: nodepool-serverstack
+        app.kubernetes.io/part-of: zuul
+        app.kubernetes.io/component: nodepool-launcher
+        operator.zuul-ci.org/nodepool-provider: serverstack
+    spec:
+      containers:
+      - name: launcher
+        image: quay.io/zuul-ci/nodepool-launcher:9.1
+        volumeMounts:
+        - name: nodepool-config
+          mountPath: /etc/nodepool
+          readOnly: true
+        - name: zookeeper-client-tls
+          mountPath: /tls/client
+          readOnly: true
+        - name: clouds-config
+          mountPath: /var/lib/nodepool/.config/openstack
+          readOnly: true
+      volumes:
+      - name: nodepool-config
+        secret:
+          secretName: nodepool-config
+      - name: clouds-config
+        secret:
+          secretName: clouds-config
+      - name: zookeeper-client-tls
+        secret:
+          secretName: zookeeper-client-tls
 YAML
 }
 
