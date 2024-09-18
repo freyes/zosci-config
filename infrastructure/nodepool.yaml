@@ -10,160 +10,51 @@ zookeeper-tls:
   cert: /tls/client/tls.crt
   key: /tls/client/tls.key
 providers:
-- name: serverstack # this is a nodepool identifier for this cloud provider (cloud+region combo)
-  region-name: serverstack  # this needs to match the region name in clouds.yaml but is only needed if there is more than one region
-  cloud: serverstack  # This needs to match the name in clouds.yaml
+- name: prodstack5 # this is a nodepool identifier for this cloud provider (cloud+region combo)
+  region-name: prodstack5  # this needs to match the region name in clouds.yaml but is only needed if there is more than one region
+  cloud: prodstack5  # This needs to match the name in clouds.yaml
   cloud-images:
-    - name: jammy   # Defines a cloud-image for nodepool
-      image-name: zuul-ubuntu-jammy-daily-amd64-server-20240614.img
-      username: ubuntu  # The user Zuul should log in as
+    - name: jammy
+      image-name: auto-sync/ubuntu-jammy-22.04-amd64-server-20240716-disk1.img
+      username: ubuntu
       python-path: /usr/bin/python3
-    - name: focal   # Defines a cloud-image for nodepool
-      image-name: zuul-ubuntu-focal-daily-amd64-server-20240626-disk1.img
-      username: ubuntu  # The user Zuul should log in as
+    - name: focal
+      image-name: auto-sync/ubuntu-focal-20.04-amd64-server-20240710-disk1.img
+      username: ubuntu
       python-path: /usr/bin/python3
-    - name: bionic   # Defines a cloud-image for nodepool
-      image-name: zuul-ubuntu-bionic-daily-amd64-server-20230607-disk1.img
-      username: ubuntu  # The user Zuul should log in as
+    - name: bionic
+      image-name: auto-sync/ubuntu-bionic-18.04-amd64-server-20230607-disk1.img
+      username: ubuntu
       python-path: /usr/bin/python3
     - name: xenial
-      image-name: zuul-ubuntu-xenial-16.04-amd64-server-20211001-disk1.img
+      image-name: auto-sync/ubuntu-xenial-16.04-amd64-server-20211001-disk1.img
       username: ubuntu
+      python-path: /usr/bin/python3
   pools:
     - name: main
-      max-servers: 35  # nodepool will never create more than this many servers
-      # auto-floating-ip: false
+      max-servers: 3
+      auto-floating-ip: false
       networks:
-        - zuul_admin_net
-        - zuul-tests_admin_net
+        - net_stg-openstack-ci-cd
       labels:
         - name: jammy-medium
-          flavor-name: 'm1.medium-cpu8'
+          flavor-name: 'stag-cpu4-ram8-disk50'
           cloud-image: jammy
           key-name: nodepool
-          userdata: |
-            #cloud-config
-            write_files:
-            - path: /etc/netplan/60-zuul.yaml
-              permissions: 0644
-              owner: root
-              content: |
-                network:
-                  version: 2
-                  ethernets:
-                    ens3:
-                      match:
-                        name: ens3
-                      dhcp4: true
-                    ens4:
-                      match:
-                        name: ens4
-                      dhcp4: true
-                      dhcp4-overrides:
-                        route-metric: 50
-            runcmd:
-              - [ netplan, apply ]
         - name: focal-medium
-          flavor-name: 'm1.medium-cpu8'
+          flavor-name: 'stag-cpu4-ram8-disk50'
           cloud-image: focal
           key-name: nodepool
-          userdata: |
-            #cloud-config
-            write_files:
-            - path: /etc/netplan/60-zuul.yaml
-              permissions: 0644
-              owner: root
-              content: |
-                network:
-                  version: 2
-                  ethernets:
-                    ens3:
-                      match:
-                        name: ens3
-                      dhcp4: true
-                    ens4:
-                      match:
-                        name: ens4
-                      dhcp4: true
-                      dhcp4-overrides:
-                        route-metric: 50
-            runcmd:
-              - [ netplan, apply ]
         - name: bionic-medium
-          flavor-name: 'm1.medium-cpu8'
+          flavor-name: 'stag-cpu4-ram8-disk50'
           cloud-image: bionic
           key-name: nodepool
-          userdata: |
-            #cloud-config
-            write_files:
-            - path: /etc/netplan/60-zuul.yaml
-              permissions: 0644
-              owner: root
-              content: |
-                network:
-                  version: 2
-                  ethernets:
-                    ens3:
-                      match:
-                        name: ens3
-                      dhcp4: true
-                    ens4:
-                      match:
-                        name: ens4
-                      dhcp4: true
-                      dhcp4-overrides:
-                        route-metric: 50
-            runcmd:
-              - [ netplan, apply ]
-        - name: xenial-medium
-          flavor-name: 'm1.medium-cpu8'
-          cloud-image: xenial
-          key-name: nodepool
-          userdata: |
-            #cloud-config
-            write_files:
-            - path: /etc/network/interfaces.d/60-zuul.cfg
-              permissions: 0644
-              owner: root
-              content: |
-                auto ens4
-                iface ens4 inet dhcp
-            - path: /etc/rc.local
-              permissions: 0755
-              owner: root
-              content: |
-                #!/bin/bash
-                sleep 15
-                /sbin/ip route del default via 10.5.0.1 dev ens3
-                /sbin/ip route add default via 172.16.0.1 dev ens4
-            runcmd:
-              - [ ifup, -a ]
-              - [ systemctl, enable, rc-local.service ]
-              - [ systemctl, start, rc-local.service ]
-    - name: microstack
-      max-servers: 2
-      #auto-floating-ip: false
-      networks:
-        - zuul_admin_net
-        - zuul-tests_admin_net
-      labels:
-        - name: jammy-brown
-          flavor-name: 'm1.brown'
-          cloud-image: jammy
-          key-name: nodepool
-        - name: focal-brown
-          flavor-name: 'm1.brown'
-          cloud-image: focal
-          key-name: nodepool
-        - name: bionic-brown
-          flavor-name: 'm1.brown'
-          cloud-image: bionic
-          key-name: nodepool
+
 labels:
   - name: jammy-medium
-    min-ready: 5 # let's keep around 5 here as well
+    min-ready: 1
   - name: focal-medium # defines label that will be used in jobs
-    min-ready: 5  # nodepool will always keep this many booted and ready to go
+    min-ready: 1
   - name: bionic-medium # defines label that will be used in jobs
   - name: xenial-medium
   - name: jammy-brown
