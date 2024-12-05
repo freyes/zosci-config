@@ -39,3 +39,18 @@ variable "ingress_class_name" {
   default = "nginx-ingress-controller"
   description = "Ingress Class Name"
 }
+
+variable "clouds_yaml" {
+  type        = string
+  description = "Path to a clouds.yaml file used to authenticate against the OpenStack cloud."
+}
+
+variable "cloud_name" {
+  type        = string
+  description = "Cloud name to use (e.g. serverstack)"
+}
+
+variable "nodepool_ssh_key_path" {
+  type        = string
+  description = "Path to the public ssh key the nodepool nodes will be created with"
+}
