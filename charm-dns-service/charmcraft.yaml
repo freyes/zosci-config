@@ -1,0 +1,40 @@
+# This file configures Charmcraft.
+# See https://juju.is/docs/sdk/charmcraft-config for guidance.
+
+name: dns-service
+type: charm
+title: A DNS Service for OpenStack instances
+summary: A very short one-line summary of the charm.
+description: |
+  A single sentence that says what the charm is, concisely and memorably.
+
+  A paragraph of one to three short sentences, that describe what the charm does.
+
+  A third paragraph that explains what need the charm meets.
+
+  Finally, a paragraph that describes whom the charm is useful for.
+
+bases:
+  - build-on:
+    - name: ubuntu
+      channel: "22.04"
+    run-on:
+    - name: ubuntu
+      channel: "22.04"
+config:
+  options:
+    debug:
+      description: |
+        Enable debugging mode
+      default: False
+      type: boolean
+
+parts:
+  charm:
+    build-packages:
+      - python3-dev
+      - libffi-dev
+      - libssl-dev
+      - rustc
+      - cargo
+      - pkg-config
