@@ -16,19 +16,19 @@ providers:
   boot-timeout: 600  # 10m
   cloud-images:
     - name: jammy
-      image-name: auto-sync/ubuntu-jammy-22.04-amd64-server-20240716-disk1.img
+      image-name: zosci-ubuntu-jammy-daily-amd64-server-20241002-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: focal
-      image-name: auto-sync/ubuntu-focal-20.04-amd64-server-20240710-disk1.img
+      image-name: zosci-ubuntu-focal-daily-amd64-server-20240821-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: bionic
-      image-name: auto-sync/ubuntu-bionic-18.04-amd64-server-20230607-disk1.img
+      image-name: zosci-ubuntu-bionic-daily-amd64-server-20230607-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: xenial
-      image-name: auto-sync/ubuntu-xenial-16.04-amd64-server-20211001-disk1.img
+      image-name: zosci-ubuntu-xenial-daily-amd64-server-20211001-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
   pools:
