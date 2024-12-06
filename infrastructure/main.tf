@@ -87,7 +87,7 @@ resource "kubernetes_secret" "clouds_config" {
   }
 
   data = {
-    "clouds.yaml" = "${file("${path.module}/secrets/clouds.yaml")}"
+    "clouds.yaml" = "${file("${var.clouds_yaml}")}"
   }
 }
 
