@@ -15,24 +15,13 @@ resource "openstack_compute_keypair_v2" "zosci-keypair" {
 }
 
 # # data sources
-# data "openstack_networking_network_v2" "ext_net" {
-#   name = "ext_net"
-# }
+# data "openstack_images_image_v2" "ubuntu_noble" {
+#   name        = "auto-sync/ubuntu-noble-24.04-amd64-server-20240710-disk1.img"
+#   most_recent = true
 
-# data "openstack_networking_secgroup_v2" "default" {
-#   name = "default"
-# }
-
-# # openstack router create zuul_router
-# resource "openstack_networking_router_v2" "zuul_router" {
-#   name                = "zuul_router"
-#   admin_state_up      = true
-#   external_network_id = data.openstack_networking_network_v2.ext_net.id
-# }
-
-# # openstack network create --disable-port-security zuul_admin_net
-# resource "openstack_networking_network_v2" "zuul_tests_admin_net" {
-#   name           = "zuul-tests_admin_net"
-#   admin_state_up = "true"
-#   dns_domain = "zuul-tests.project.serverstack."
+#   properties = {
+#     os_distro    = "ubuntu"
+#     os_version   = "24.04"
+#     product_name = "com.ubuntu.cloud:server:24.04:amd64"
+#   }
 # }
