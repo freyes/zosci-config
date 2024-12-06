@@ -265,6 +265,7 @@ resource "kubernetes_stateful_set" "mysql" {
 resource "kubectl_manifest" "selfsigned_issuer" {
   # apply_only    = true
   # ignore_fields = ["data", "annotations"]
+  server_side_apply = true
   yaml_body     = <<YAML
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -354,6 +355,7 @@ YAML
 resource "kubectl_manifest" "zookeeper_client_tls" {
   # apply_only    = true
   # ignore_fields = ["data", "annotations"]
+  server_side_apply = true
   yaml_body     = <<YAML
 apiVersion: cert-manager.io/v1
 kind: Certificate
