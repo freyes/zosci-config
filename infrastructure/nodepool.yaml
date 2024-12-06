@@ -15,16 +15,20 @@ providers:
   cloud: prodstack5  # This needs to match the name in clouds.yaml
   boot-timeout: 600  # 10m
   cloud-images:
+    - name: noble
+      image-name: zosci/ubuntu-noble-24.04-amd64-server-20241119-disk1.img
+      username: ubuntu
+      python-path: /usr/bin/python3
     - name: jammy
-      image-name: zosci-ubuntu-jammy-daily-amd64-server-20241002-disk1.img
+      image-name: zosci/ubuntu-jammy-22.04-amd64-server-20241004-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: focal
-      image-name: zosci-ubuntu-focal-daily-amd64-server-20240821-disk1.img
+      image-name: zosci/ubuntu-focal-20.04-amd64-server-20241112-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: bionic
-      image-name: zosci-ubuntu-bionic-daily-amd64-server-20230607-disk1.img
+      image-name: zosci/ubuntu-bionic-18.04-amd64-server-20230607-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: xenial
