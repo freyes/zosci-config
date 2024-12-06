@@ -13,6 +13,7 @@ providers:
 - name: prodstack5 # this is a nodepool identifier for this cloud provider (cloud+region combo)
   region-name: prodstack5  # this needs to match the region name in clouds.yaml but is only needed if there is more than one region
   cloud: prodstack5  # This needs to match the name in clouds.yaml
+  boot-timeout: 600  # 10m
   cloud-images:
     - name: jammy
       image-name: auto-sync/ubuntu-jammy-22.04-amd64-server-20240716-disk1.img
