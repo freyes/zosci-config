@@ -382,61 +382,98 @@ spec:
 YAML
 }
 
-resource "kubectl_manifest" "nodepool_deployment" {
-  yaml_body = <<YAML
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nodepool-launcher-serverstack
-  namespace: zuul
-  labels:
-    app.kubernetes.io/name: nodepool
-    app.kubernetes.io/instance: nodepool-serverstack
-    app.kubernetes.io/part-of: zuul
-    app.kubernetes.io/component: nodepool-launcher
-    operator.zuul-ci.org/nodepool-provider: serverstack
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: nodepool
-      app.kubernetes.io/instance: nodepool-serverstack
-      app.kubernetes.io/part-of: zuul
-      app.kubernetes.io/component: nodepool-launcher
-      operator.zuul-ci.org/nodepool-provider: serverstack
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: nodepool
-        app.kubernetes.io/instance: nodepool-serverstack
-        app.kubernetes.io/part-of: zuul
-        app.kubernetes.io/component: nodepool-launcher
-        operator.zuul-ci.org/nodepool-provider: serverstack
-    spec:
-      containers:
-      - name: launcher
-        image: quay.io/zuul-ci/nodepool-launcher:9.1
-        volumeMounts:
-        - name: nodepool-config
-          mountPath: /etc/nodepool
-          readOnly: true
-        - name: zookeeper-client-tls
-          mountPath: /tls/client
-          readOnly: true
-        - name: clouds-config
-          mountPath: /var/lib/nodepool/.config/openstack
-          readOnly: true
-      volumes:
-      - name: nodepool-config
-        secret:
-          secretName: nodepool-config
-      - name: clouds-config
-        secret:
-          secretName: clouds-config
-      - name: zookeeper-client-tls
-        secret:
-          secretName: zookeeper-client-tls
-YAML
+resource "kubernetes_deployment" "nodepool_deployment" {
+  metadata {
+    name = "nodepool-launcher-${var.cloud_name}"
+    namespace = kubernetes_namespace.zuul.metadata[0].name
+    labels = {
+      name = "nodepool"
+      instance = "nodepool-${var.cloud_name}"
+      part-of = "zuul"
+      component = "nodepool-launcher"
+      nodepool-provider = "${var.cloud_name}"
+    }
+  }
+  timeouts {
+    create = "2m"
+    update = "2m"
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        name = "nodepool"
+        instance = "nodepool-${var.cloud_name}"
+        part-of = "zuul"
+        component  = "nodepool-launcher"
+        nodepool-provider = "${var.cloud_name}"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          name = "nodepool"
+          instance = "nodepool-${var.cloud_name}"
+          part-of = "zuul"
+          component  = "nodepool-launcher"
+          nodepool-provider = "${var.cloud_name}"
+        }
+      }
+      spec {
+        image_pull_secrets {
+          name = kubernetes_secret.docker_registry.metadata[0].name
+        }
+        container {
+          name = "launcher"
+          # image = "quay.io/zuul-ci/nodepool-launcher:9.1"
+          image = "freyes/nodepool-launcher:custom"
+          image_pull_policy = "Always"
+          #command = ["/bin/sh", "-c"]
+          #args = ["until test -s /etc/openstack/clouds.yaml ;do echo -n '.'; sleep 5;done && cat /etc/openstack/clouds.yaml && ls -l /etc/openstack/clouds.yaml && echo ~nodepool && su - nodepool 'cat /etc/openstack/clouds.yaml' && id && /usr/local/bin/nodepool-launcher -f"]
+          command = ["/bin/sh", "-c"]
+          args = ["/usr/local/bin/nodepool-launcher -d -f"]
+          env {
+            name  = "DEBUG"
+            value = "1"
+          }
+          volume_mount {
+            name = "nodepool-config"
+            mount_path = "/etc/nodepool"
+            read_only = true
+          }
+          volume_mount {
+            name = "zookeeper-client-tls"
+            mount_path = "/tls/client"
+            read_only = true
+          }
+          volume_mount {
+            name = "clouds-config"
+            mount_path = "/etc/openstack"
+            read_only = true
+          }
+        }
+        volume {
+          name = "nodepool-config"
+          secret {
+            secret_name = "nodepool-config"
+          }
+        }
+        volume {
+          name = "zookeeper-client-tls"
+          secret {
+            secret_name = "zookeeper-client-tls"
+          }
+        }
+        volume {
+          name = "clouds-config"
+          secret {
+            secret_name = "clouds-config"
+            default_mode = "0444"
+          }
+        }
+      }
+    }
+  }
 }
 
 resource "kubernetes_pod_disruption_budget" "zookeeper" {
