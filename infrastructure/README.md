@@ -68,5 +68,3 @@ for SRC_IMAGE in auto-sync/ubuntu-bionic-18.04-amd64-server-20230607-disk1.img \
 done
 openstack image list | zosci
 ```
-
-`
