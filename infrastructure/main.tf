@@ -33,6 +33,12 @@ resource "kubernetes_namespace" "zuul" {
     }
 }
 
+module "openstack_bootstrap" {
+  source = "./modules/zosci-openstack"
+  keypair_name = "nodepool"
+  keypair_public_key = "${file("${var.nodepool_ssh_key_path}")}"
+}
+
 data "template_file" "docker_config_script" {
   template = "${file("${path.module}/dockerconfig.json")}"
   vars = {
