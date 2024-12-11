@@ -50,10 +50,10 @@ data "template_file" "docker_config_script" {
   }
 }
 
-# module "cert_manager" {
-#   source = "github.com/sculley/terraform-kubernetes-cert-manager"
-#   namespace = "cert-manager"
-# }
+module "cert_manager" {
+  source = "github.com/sculley/terraform-kubernetes-cert-manager"
+  namespace = "cert-manager"
+}
 
 # Secrets
 resource "kubernetes_secret" "docker_registry" {
