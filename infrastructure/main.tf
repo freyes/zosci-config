@@ -319,6 +319,7 @@ YAML
 }
 
 resource "kubectl_manifest" "zookeeper_server_tls" {
+  depends_on = [module.cert_manager]
   # apply_only    = true
   # ignore_fields = ["data", "annotations"]
   yaml_body     = <<YAML
@@ -353,6 +354,7 @@ spec:
 YAML
 }
 resource "kubectl_manifest" "zookeeper_client_tls" {
+  depends_on = [module.cert_manager]
   # apply_only    = true
   # ignore_fields = ["data", "annotations"]
   server_side_apply = true
