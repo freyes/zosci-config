@@ -1310,8 +1310,9 @@ resource "kubernetes_stateful_set" "zuul_merger" {
             }
             spec {
                 security_context {
-                    run_as_user     = "10001"
-                    run_as_group    = "10001"
+                  run_as_user     = "10001"
+                  run_as_group    = "10001"
+                  fs_group        = "10001"
                 }
                 container {
                     name = "merger"
@@ -1321,6 +1322,11 @@ resource "kubernetes_stateful_set" "zuul_merger" {
                         "-f",
                         "-d"
                     ]
+                    volume_mount {
+                        name = "uosci-id-rsa"
+                        mount_path = "/zuul/.ssh"
+                        read_only = "true"
+                    }
                     volume_mount {
                         name = "zuul-config"
                         mount_path = "/etc/zuul"
@@ -1336,6 +1342,13 @@ resource "kubernetes_stateful_set" "zuul_merger" {
                     }
                 }
                 termination_grace_period_seconds = 3600
+                volume {
+                    name = "uosci-id-rsa"
+                    secret {
+                      secret_name = "uosci-id-rsa"
+                      default_mode = "0600"
+                    }
+                }
                 volume {
                     name = "zuul-var"
                     empty_dir {}
