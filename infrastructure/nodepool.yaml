@@ -40,7 +40,7 @@ providers:
       max-servers: 3
       auto-floating-ip: false
       networks:
-        - net_stg-openstack-ci-cd
+        - net_stg-openstack-zosci
       labels:
         - name: jammy-medium
           flavor-name: 'staging-cpu4-ram8-disk50'
