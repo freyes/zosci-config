@@ -1236,6 +1236,11 @@ resource "kubernetes_stateful_set" "zuul_executor" {
                         mount_path = "/tls/client"
                         read_only = "true"
                     }
+                    volume_mount {
+                        name = "uosci-id-rsa"
+                        mount_path = "/zuul/.ssh"
+                        read_only = "true"
+                    }
                     security_context {
                         privileged = "true"
                     }
