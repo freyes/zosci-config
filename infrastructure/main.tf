@@ -479,6 +479,7 @@ resource "kubernetes_deployment" "nodepool_deployment" {
 }
 
 resource "kubernetes_pod_disruption_budget" "zookeeper" {
+  count = var.enable_zk_disruption_budget ? 1 : 0
   metadata {
     name = "zookeeper"
     namespace = kubernetes_namespace.zuul.metadata[0].name

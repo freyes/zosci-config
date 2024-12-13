@@ -54,3 +54,9 @@ variable "nodepool_ssh_key_path" {
   type        = string
   description = "Path to the public ssh key the nodepool nodes will be created with"
 }
+
+variable "enable_zk_disruption_budget" {
+  type        = bool
+  default     = false
+  description = "Enable zookeeper disruption budget declaration for HA scenarios"
+}
