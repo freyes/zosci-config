@@ -1247,6 +1247,13 @@ resource "kubernetes_stateful_set" "zuul_executor" {
                 }
                 termination_grace_period_seconds = 300
                 volume {
+                    name = "uosci-id-rsa"
+                    secret {
+                      secret_name = "uosci-id-rsa"
+                      default_mode = "0600"
+                    }
+                }
+                volume {
                     name = "zuul-var"
                     empty_dir {}
                 }
