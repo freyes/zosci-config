@@ -1202,8 +1202,9 @@ resource "kubernetes_stateful_set" "zuul_executor" {
             }
             spec {
                 security_context {
-                    run_as_user = "10001"
-                    run_as_group = "10001"
+                  run_as_user  = "10001"
+                  run_as_group = "10001"
+                  fs_group     = "10001"
                 }
                 container {
                     name = "executor"
