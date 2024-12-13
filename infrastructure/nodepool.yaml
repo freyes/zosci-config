@@ -10,9 +10,9 @@ zookeeper-tls:
   cert: /tls/client/tls.crt
   key: /tls/client/tls.key
 providers:
-- name: prodstack5 # this is a nodepool identifier for this cloud provider (cloud+region combo)
-  region-name: prodstack5  # this needs to match the region name in clouds.yaml but is only needed if there is more than one region
-  cloud: prodstack5  # This needs to match the name in clouds.yaml
+- name: prodstack6 # this is a nodepool identifier for this cloud provider (cloud+region combo)
+  region-name: prodstack6  # this needs to match the region name in clouds.yaml but is only needed if there is more than one region
+  cloud: prodstack6  # This needs to match the name in clouds.yaml
   boot-timeout: 600  # 10m
   cloud-images:
     - name: noble
