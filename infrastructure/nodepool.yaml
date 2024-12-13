@@ -43,15 +43,15 @@ providers:
         - net_stg-openstack-ci-cd
       labels:
         - name: jammy-medium
-          flavor-name: 'stag-cpu4-ram8-disk50'
+          flavor-name: 'staging-cpu4-ram8-disk50'
           cloud-image: jammy
           key-name: nodepool
         - name: focal-medium
-          flavor-name: 'stag-cpu4-ram8-disk50'
+          flavor-name: 'staging-cpu4-ram8-disk50'
           cloud-image: focal
           key-name: nodepool
         - name: bionic-medium
-          flavor-name: 'stag-cpu4-ram8-disk50'
+          flavor-name: 'staging-cpu4-ram8-disk50'
           cloud-image: bionic
           key-name: nodepool
 
