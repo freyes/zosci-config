@@ -68,3 +68,38 @@ for SRC_IMAGE in auto-sync/ubuntu-bionic-18.04-amd64-server-20230607-disk1.img \
 done
 openstack image list | zosci
 ```
+
+## FAQ
+
+### Accessing Zuul Web (via kube-proxy)
+
+In the bastion that has access to the k8s cluster create a proxy to zuul-web on port 9000
+
+``` bash
+kubectl -n zuul port-forward --address 0.0.0.0 $(kubectl get pods -n zuul | grep zuul-web | awk '{print $1}') 9001:9000
+```
+
+Then in your machine when you have SSH access to the bastion run:
+
+``` bash
+ssh <bastion ip> -N -L9002:localhost:9001
+```
+
+And finally open your web browser at http://localhost:9002/t/openstack/status
+
+### How to pause nodepool?
+
+To pause nodepool's execution scale the deployment to 0 replicas.
+
+``` bash
+NODEPOOL_DEPLOYMENT="$(kubectl get deployments -n zuul | grep nodepool-launcher | awk '{print $1}')"
+kubectl scale --replicas=0 -n zuul deployment/$NODEPOOL_DEPLOYMENT
+```
+
+To resume nodepool scale the deployment back to 1 replica.
+
+``` bash
+NODEPOOL_DEPLOYMENT="$(kubectl get deployments -n zuul | grep nodepool-launcher | awk '{print $1}')"
+kubectl scale --replicas=1 -n zuul deployment/$NODEPOOL_DEPLOYMENT
+```
+
