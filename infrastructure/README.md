@@ -57,17 +57,7 @@ glance-simplestreams-sync making Ubuntu images available although they will be
 rotated automatically by default too, so it's better to make copies of the
 images that will be used by nodepool.
 
-``` bash
-for SRC_IMAGE in auto-sync/ubuntu-bionic-18.04-amd64-server-20230607-disk1.img \
-    auto-sync/ubuntu-focal-20.04-amd64-server-20241112-disk1.img \
-    auto-sync/ubuntu-jammy-22.04-amd64-server-20241004-disk1.img \
-    auto-sync/ubuntu-noble-24.04-amd64-server-20241119-disk1.img ; do
-        DST_IMAGE="zosci/$(echo $SRC_IMAGE | cut -d'/' -f2)"
-        echo "copying from $SRC_IMAGE to $DST_IMAGE"
-        openstack image save $SRC_IMAGE | openstack image create --private $DST_IMAGE
-done
-openstack image list | zosci
-```
+Run [tools/copy-images.sh](./tools/copy-images.sh)
 
 ## FAQ
 
