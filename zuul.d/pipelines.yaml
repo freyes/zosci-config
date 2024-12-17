@@ -50,11 +50,11 @@
       gerrit:
         # Note that gerrit keywords are case-sensitive.
         Verified: 1
-      mysql:
+      database:
     failure:
       gerrit:
         Verified: -1
-      mysql:
+      database:
 
 - pipeline:
     name: experimental
@@ -74,10 +74,10 @@
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*check experimental\s*$
     success:
       gerrit: {}
-      mysql:
+      database:
     failure:
       gerrit: {}
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-daily
@@ -90,9 +90,9 @@
       timer:
         - time: '0 4 * * *'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly
@@ -107,9 +107,9 @@
         # is a working day in some geographies.
         - time: '0 4 * * 6'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-sunday
@@ -122,9 +122,9 @@
       timer:
         - time: '11 1 * * 0'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-monday
@@ -137,9 +137,9 @@
       timer:
         - time: '11 1 * * 1'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-tuesday
@@ -152,9 +152,9 @@
       timer:
         - time: '11 1 * * 2'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-wednesday
@@ -167,9 +167,9 @@
       timer:
         - time: '11 1 * * 3'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-thursday
@@ -182,9 +182,9 @@
       timer:
         - time: '11 1 * * 4'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-friday
@@ -197,9 +197,9 @@
       timer:
         - time: '11 1 * * 5'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: periodic-weekly-saturday
@@ -212,9 +212,9 @@
       timer:
         - time: '11 1 * * 6'
     success:
-      mysql:
+      database:
     failure:
-      mysql:
+      database:
 
 - pipeline:
     name: promote
@@ -233,7 +233,7 @@
         - event: change-merged
     success:
       gerrit: {}
-      mysql:
+      database:
     failure:
       gerrit: {}
-      mysql:
+      database:
