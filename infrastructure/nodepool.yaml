@@ -20,7 +20,7 @@ providers:
       username: ubuntu
       python-path: /usr/bin/python3
     - name: jammy
-      image-name: zosci/ubuntu-jammy-22.04-amd64-server-20241004-disk1.img
+      image-name: zosci/ubuntu-jammy-22.04-amd64-server-20241206-disk1.img
       username: ubuntu
       python-path: /usr/bin/python3
     - name: focal
