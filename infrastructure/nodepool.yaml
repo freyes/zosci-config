@@ -41,6 +41,8 @@ providers:
       auto-floating-ip: false
       networks:
         - net_stg-openstack-zosci
+      security-groups:
+        - zuul-sec-group
       labels:
         - name: jammy-medium
           flavor-name: 'staging-cpu4-ram8-disk50'

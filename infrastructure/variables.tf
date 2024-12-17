@@ -60,3 +60,8 @@ variable "enable_zk_disruption_budget" {
   default     = false
   description = "Enable zookeeper disruption budget declaration for HA scenarios"
 }
+
+variable "k8s_cluster_secgroup" {
+  type        = string
+  description = "Security group name associated to the juju model where the k8s cluser is deployed"
+}

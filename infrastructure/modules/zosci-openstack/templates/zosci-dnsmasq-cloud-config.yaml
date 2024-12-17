@@ -1,0 +1,23 @@
+#cloud-config
+hostname: zosci-dnsmasq
+fqdn: zosci-dnsmasq.${domain}
+
+# network:
+#   version: 2
+#   ethernets:
+#     # opaque ID for physical interfaces, only referred to by other stanzas
+#     id0:
+#       match:
+#         name: en*
+#       dhcp4: false
+#       addresses:
+#         - 172.16.0.3/24
+#       gateway4: 192.168.14.1
+#       nameservers:
+#         search: ["${domain}"]
+#         addresses: [10.130.64.38]
+#       # # static routes
+#       # routes:
+#       #   - to: 192.0.2.0/24
+#       #     via: 11.0.0.1
+#       #     metric: 3
