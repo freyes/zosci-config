@@ -8,7 +8,8 @@
     source:
       github-git:
         config-projects:
-          - freyes/zosci-config:
+          - openstack-charmers/zosci-config:
+              # NOTE(freyes): Drop when zosci-ng branch has been merged to master
               load-branch: zosci-ng
         untrusted-projects:
           - openstack-charmers/charmed-openstack-tester:
